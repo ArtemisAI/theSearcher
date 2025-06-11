@@ -38,3 +38,21 @@
 
  ## Done
  - [x] Add README.md stub
+
+- [ ] Define project structure (directories, main files) - (Covered by initial setup)
+- [ ] Implement folder iteration logic
+- [ ] Implement image existence check in folders
+- [ ] Research and select Google API for image search
+- [ ] Implement Google Image Search functionality
+- [ ] Implement image download and save functionality
+- [ ] Implement logging for progress and errors
+- [ ] Implement comprehensive error handling
+- [ ] Write unit tests for folder iteration
+- [ ] Write unit tests for image existence check
+- [ ] Write unit tests for Google Image Search (mocking API calls)
+- [ ] Write unit tests for image download
+- [ ] Create `.env.example` with placeholder for API key
+- [ ] Write script for user to input folder path
+- [ ] Write main script execution flow
+- [ ] Refine code and add comments
+- [ ] Final testing and debugging

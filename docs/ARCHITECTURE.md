@@ -22,26 +22,64 @@
 * Provider interface in `providers/__init__.py`; add `SerpAPIProvider` later.
 * Plug-in system for audio-tag embedding (`plugins/tagger_mutagen.py`).
 =======
- # Architecture Overview – theSearcher
+# Project Architecture
 
- ## 1 Components
- 1. **Scanner** – walks the directory tree and detects missing images in folders.
- 2. **Fetcher** – integrates with Google Custom Search API to retrieve relevant images.
- 3. **Config Layer** – environment variables (`.env`) for API keys, search engine ID, logging levels.
- 4. **Logging & Metrics** – Python `logging` for audit and debugging.
- 5. **Container** – Docker image with entry-point CLI.
+## Overview
+The application will be a Python script designed to run locally. It will scan a user-specified directory of music albums, identify albums missing cover art, search for appropriate art using the Google Images API, and download it.
 
- ## 2 Data Flow
- ```text
- [Filesystem] → (Scanner) → missing? ──► (Fetcher) ─► [Google API]
- ▲        │                              ▼
- └────────┴─────────── download.jpg     logs/metrics ────▶ [File/Monitoring]
- ```
+## Components
+1.  **Main Script (`src/album_art_downloader.py`):**
+    *   Handles command-line arguments (input folder path).
+    *   Orchestrates the overall process.
+    *   Initializes and uses other components.
 
- ## 3 Error Handling
- * Network or quota errors: retry with back-off, then skip.
- * No images found: log warning and continue.
+2.  **Folder Scanner (`src/folder_utils.py`):**
+    *   Responsible for iterating through subdirectories of the main music folder.
+    *   Identifies potential album folders.
 
- ## 4 Extensibility
- * Provider interface for alternate search APIs.
- * Plugin system for image post-processing.
+3.  **Image Checker (`src/image_utils.py`):**
+    *   Checks if a recognized image file (e.g., `cover.jpg`, `folder.png`) already exists in an album folder.
+    *   Supports common image extensions (JPEG, PNG).
+
+4.  **Google Image Search Client (`src/google_image_client.py`):**
+    *   Manages interaction with the Google Custom Search JSON API.
+    *   Constructs search queries based on folder names (album titles).
+    *   Retrieves search results.
+    *   Requires an API key, which will be stored in a `.env` file.
+
+5.  **Image Downloader (`src/image_utils.py`):**
+    *   Handles downloading the selected image from a URL.
+    *   Saves the image to the appropriate album folder with a standardized name.
+
+6.  **Logging Module:**
+    *   Standard Python `logging` module.
+    *   Configured to log important events, errors, and progress.
+    *   Output to console and potentially a log file.
+
+7.  **Configuration (`.env`):**
+    *   Stores sensitive information like the Google API Key.
+    *   Loaded at runtime.
+
+## Data Flow
+1.  User runs the script, providing a path to their music library.
+2.  The **Main Script** invokes the **Folder Scanner**.
+3.  **Folder Scanner** identifies an album folder.
+4.  **Main Script** invokes the **Image Checker** for that folder.
+5.  If no image is found:
+    a.  **Main Script** uses the folder name to instruct **Google Image Search Client** to find album art.
+    b.  **Google Image Search Client** returns a list of potential image URLs.
+    c.  **Main Script** (or a dedicated selection logic) picks the best URL.
+    d.  **Main Script** instructs **Image Downloader** to fetch and save the image.
+6.  Process repeats for all album folders.
+7.  **Logging Module** records actions and errors throughout the process.
+
+## Error Handling
+-   API request failures (network issues, invalid API key).
+-   Image download failures.
+-   File system errors (permissions, disk space).
+-   Invalid input folder path.
+
+## Future Considerations
+-   Asynchronous operations for API calls and downloads to improve performance for large libraries.
+-   A more sophisticated image selection module (e.g., using image analysis or user preferences).
+-   Plugin architecture for different image search providers or metadata sources.

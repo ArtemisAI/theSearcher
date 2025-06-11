@@ -1,10 +1,22 @@
- # Roadmap – theSearcher
+# Project Roadmap
 
- | Stage | Time-box      | Deliverable                                      |
- | ----- | ------------- | ------------------------------------------------ |
- | 0     | ½ day         | Repo skeleton, documentation files committed      |
- | 1     | 2 days        | Basic CLI scan and fetch implementation           |
- | 2     | 3 days        | Robust error handling, logging, unit tests        |
- | 3     | 1 day         | Docker image, `.env.example`, README updates      |
- | 4     | 1 day         | CI/CD setup: linting, tests, image build & push   |
- | 5     | ½ day         | QA run on sample libraries, metrics report        |
+## Phase 1: Core Functionality (MVP)
+-   [X] Basic project setup and documentation.
+-   [ ] Implement local folder iteration.
+-   [ ] Check for existing album art in folders.
+-   [ ] Integrate with Google Image Search API for album art.
+-   [ ] Download and save album art to respective folders.
+-   [ ] Basic logging and error handling.
+-   [ ] Core unit tests.
+
+## Phase 2: Enhancements
+-   [ ] Allow user to choose from multiple search results.
+-   [ ] Support for more image formats.
+-   [ ] Option to overwrite existing album art.
+-   [ ] More sophisticated image selection logic (e.g., based on resolution, aspect ratio).
+-   [ ] GUI for easier use (potential).
+
+## Phase 3: Advanced Features
+-   [ ] Batch processing with progress bar.
+-   [ ] Integration with music metadata services (e.g., MusicBrainz) for more accurate searches.
+-   [ ] Configurable settings (e.g., preferred image resolution, naming conventions).
